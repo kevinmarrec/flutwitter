@@ -1,0 +1,44 @@
+{
+  "name": "flutwitter-api",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "LOGGER=true nodemon -w src --ext ts,json --exec node -r jiti/register src | pino-colada",
+    "start": "node -r jiti/register src",
+    "db:init": "prisma migrate dev -n init",
+    "db:migrate": "prisma migrate dev",
+    "db:reset": "prisma migrate reset --skip-seed",
+    "db:seed": "jiti prisma/seed",
+    "studio": "prisma studio",
+    "lint": "eslint . --ext .ts,.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.6.0",
+    "@sinclair/typebox": "^0.23.1",
+    "dotenv": "^10.0.0",
+    "fastify": "^3.24.1",
+    "fastify-autoload": "^3.9.0",
+    "fastify-jwt": "^4.1.1",
+    "fastify-plugin": "^3.0.0",
+    "fastify-sensible": "^3.1.2",
+    "jiti": "^1.12.9"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.3",
+    "@types/knex-cleaner": "^1.3.2",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
+    "eslint": "^8.4.1",
+    "execa": "^5.1.1",
+    "jest": "^27.4.4",
+    "knex-cleaner": "^1.3.1",
+    "nodemon": "^2.0.15",
+    "pg": "^8.7.1",
+    "pino-colada": "^2.2.0",
+    "prisma": "^3.6.0",
+    "ts-jest": "^27.1.1",
+    "typescript": "^4.5.3"
+  }
+}
