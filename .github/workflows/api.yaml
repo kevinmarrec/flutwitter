@@ -5,8 +5,12 @@ on:
     branches:
       - main
     paths:
+      - '.github/workflows/api.yaml'
       - 'api/**'
 
+defaults:
+  run:
+    working-directory: api
 
 jobs:
   lint:
