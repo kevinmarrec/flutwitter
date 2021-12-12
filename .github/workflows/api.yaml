@@ -26,7 +26,8 @@ jobs:
           path: ~/.pnpm-store
           key: deps-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - uses: pnpm/action-setup@v2.0.1
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.0.1
         with:
           version: 6.23.6
           run_install: true
@@ -62,7 +63,8 @@ jobs:
           path: ~/.pnpm-store
           key: deps-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - uses: pnpm/action-setup@v2.0.1
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.0.1
         with:
           version: 6.23.6
           run_install: true
