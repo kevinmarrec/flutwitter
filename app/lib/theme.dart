@@ -47,6 +47,7 @@ ThemeData getTheme() {
         color: Color(0xFF8899A6),
       ),
       headline4: TextStyle(
+        fontSize: 30,
         fontWeight: FontWeight.bold,
       ),
     ),
