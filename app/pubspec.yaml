@@ -19,7 +19,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_hooks: ^0.18.0
   flutter_lints: ^1.0.0
+  flutter_svg: ^1.0.0
+
+  hooks_riverpod: ^1.0.2
 
 flutter:
   uses-material-design: true
@@ -28,5 +32,4 @@ flutter:
   generate: true
 
   assets:
-    # Add assets from the images directory to the application.
-    - assets/images/
+    - assets/svg/
