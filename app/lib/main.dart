@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import './theme.dart';
 import './router.dart';
+import './theme.dart';
 
 void main() async => runApp(const MyApp());
 

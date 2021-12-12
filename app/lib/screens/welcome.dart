@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutwitter/screens/signup/create_account.dart';
 
+import '../theme.dart';
 import '../widgets/twitter_icon.dart';
 
 class WelcomeScreen extends StatelessWidget {
+  static const routeName = '/';
+
   const WelcomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const TwitterIcon(),
         centerTitle: true,
       ),
@@ -23,19 +28,48 @@ class WelcomeScreen extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: constraints.maxHeight * 0.2),
-                const Text(
+                Text(
                   "See what's happening in the world right now.",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headline4,
                 ),
-                const Spacer(),
+                const Spacer(flex: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          CreateAccountScreen.routeName,
+                        );
+                      },
                       child: const Text('Create an account'),
                     )
                   ],
+                ),
+                const Spacer(flex: 2),
+                RichText(
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.caption,
+                    children: const [
+                      TextSpan(text: 'By signing up, you agree to our '),
+                      TextSpan(
+                        text: 'Terms',
+                        style: TextStyle(color: primaryColor),
+                      ),
+                      TextSpan(text: ', '),
+                      TextSpan(
+                        text: 'Privacy Policy',
+                        style: TextStyle(color: primaryColor),
+                      ),
+                      TextSpan(text: ' and '),
+                      TextSpan(
+                        text: 'Cookie Use',
+                        style: TextStyle(color: primaryColor),
+                      ),
+                      TextSpan(text: '.'),
+                    ],
+                  ),
                 ),
                 const Spacer(),
                 Row(

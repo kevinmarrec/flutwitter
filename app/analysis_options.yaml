@@ -2,5 +2,6 @@ include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
-    require_trailing_commas: true
-    prefer_relative_imports: true
+    - directives_ordering
+    - prefer_relative_imports
+    - require_trailing_commas

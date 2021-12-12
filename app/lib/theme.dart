@@ -39,6 +39,17 @@ ThemeData getTheme() {
     ),
     scaffoldBackgroundColor: backgroundColor,
     splashFactory: NoSplash.splashFactory,
+    textTheme: const TextTheme(
+      bodyText2: TextStyle(
+        color: Color(0xFF8899A6),
+      ),
+      caption: TextStyle(
+        color: Color(0xFF8899A6),
+      ),
+      headline4: TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+    ),
   );
 
   return theme;
