@@ -11,6 +11,13 @@
       "request": "launch",
     },
     {
+      "name": "App (profile)",
+      "cwd": "${workspaceFolder}/app",
+      "type": "dart",
+      "request": "launch",
+      "flutterMode": "profile"
+    },
+    {
       "name": "API",
       "cwd": "${workspaceFolder}/api",
       "type": "node",

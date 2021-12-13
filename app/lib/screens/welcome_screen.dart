@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutwitter/screens/signup/create_account.dart';
 
+import './create_account_screen.dart';
 import '../theme.dart';
-import '../widgets/twitter_icon.dart';
+import '../widgets/svg_icon.dart';
 
 class WelcomeScreen extends StatelessWidget {
   static const routeName = '/';
@@ -14,7 +14,7 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const TwitterIcon(),
+        title: SvgIcon.twitter(),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -27,7 +27,7 @@ class WelcomeScreen extends StatelessWidget {
             ),
             child: Column(
               children: [
-                SizedBox(height: constraints.maxHeight * 0.2),
+                const Spacer(flex: 6),
                 Text(
                   "See what's happening in the world right now.",
                   style: Theme.of(context).textTheme.headline4,
