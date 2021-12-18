@@ -1,0 +1,17 @@
+{
+  "dependencyDashboard": true,
+  "extends": [
+    "config:base",
+    "group:allNonMajor",
+    ":semanticCommitTypeAll(chore)",
+    ":semanticCommitScope(api/deps)"
+  ],
+  "rangeStrategy": "bump",
+  "commitMessageTopic": "{{prettyDepType}} {{depName}}",
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "ignorePaths": [
+    "**/app/**"
+  ]
+}
