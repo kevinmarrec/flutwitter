@@ -29,5 +29,11 @@ test('server is healthy', async () => {
 })
 
 describe ('routes', () => {
+  test('/', async () => {
+    const response = await server.inject('/')
+    expect(response.body).toBe('FlutTwitter API')
+  })
+
   require('./routes/auth')
+  require('./routes/register')
 })

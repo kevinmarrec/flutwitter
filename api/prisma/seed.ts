@@ -3,12 +3,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function seed () {
-  await prisma.user.create({
-    data: {
-      required: 'Michel',
-      optional: ''
-    }
-  })
+  // Seed some data here
 }
 
 seed()
