@@ -23,10 +23,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
-      - name: Cache packages
+      - name: Cache Flutter
         uses: actions/cache@v2
         with:
-          path: ${{ env.PUB_CACHE }}
+          path: /opt/hostedtoolcache/flutter
           key: deps-${{ hashFiles('**/pubspec.lock') }}
 
       - name: Setup Java
@@ -41,9 +41,7 @@ jobs:
           channel: 'stable'
 
       - name: Get packages
-        run: |
-          echo $PUB_CACHE
-          flutter pub get
+        run: flutter pub get
 
       - name: Run tests
         run: flutter test
