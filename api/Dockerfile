@@ -1,4 +1,4 @@
-FROM node:14-alpine AS base
+FROM node:16-alpine AS base
 
 RUN npm install -g pnpm
 
@@ -12,7 +12,7 @@ COPY . .
 
 RUN pnpm prisma generate
 
-FROM node:14-alpine
+FROM node:16-alpine
 
 RUN npm install -g pnpm
 

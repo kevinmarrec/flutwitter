@@ -41,7 +41,9 @@ jobs:
           channel: 'stable'
 
       - name: Get packages
-        run: flutter pub get
+        run: |
+          echo $PUB_CACHE
+          flutter pub get
 
       - name: Run tests
         run: flutter test

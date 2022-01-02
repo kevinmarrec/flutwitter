@@ -15,9 +15,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  easy_debounce: ^2.0.1
+  easy_debounce: ^2.0.2+1
   dio: ^4.0.4
-  flutter_hooks: ^0.18.1
+  flutter_hooks: ^0.18.2
   flutter_svg: ^1.0.0
   hooks_riverpod: ^1.0.3
 
