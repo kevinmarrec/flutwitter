@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,14 +9,21 @@ import 'package:intl/intl.dart' show DateFormat;
 import '../shared/dio.dart';
 import '../widgets/svg_icon.dart';
 
-final checkEmail = FutureProvider.family<bool, String>((ref, email) async {
-  final dio = ref.watch(dioProvider);
-  final response = (await dio.get<bool>(
-    '/register/check_email',
-    queryParameters: {'email': email},
-  ));
-  return response.data == true;
-});
+class Registration {
+  Registration({
+    required this.name,
+    required this.email,
+    required this.birthDate,
+  });
+
+  String name;
+  String email;
+  DateTime birthDate;
+}
+
+final registrationProvider = StateProvider<Registration>(
+  (_) => Registration(name: '', email: '', birthDate: DateTime.now()),
+);
 
 class CreateAccountScreen extends HookConsumerWidget {
   static const routeName = '/register/create';
@@ -53,9 +61,44 @@ class CreateAccountScreen extends HookConsumerWidget {
                   child: const CreateAccountForm(),
                 ),
                 const Spacer(flex: 2),
-                const ElevatedButton(
-                  onPressed: null,
-                  child: Text('Sign up'),
+                ElevatedButton(
+                  onPressed: () async {
+                    final registration = ref.read(registrationProvider);
+
+                    try {
+                      await ref.read(dioProvider).post(
+                        '/register',
+                        data: {
+                          'email': registration.email,
+                          'name': registration.name,
+                          'birthDate': registration.birthDate.toUtc().toIso8601String(),
+                        },
+                      );
+
+                      print('Success');
+                    } catch (e) {
+                      if (e is DioError) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: const Text("Can't complete your signup right now."),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'Close',
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: const Text('Sign up'),
                 )
               ],
             ),
@@ -96,8 +139,7 @@ class NameField extends HookConsumerWidget {
       autofocus: true,
       decoration: InputDecoration(
         hintText: 'Name',
-        suffixIcon:
-            nameFieldValid.value ? SvgIcon.checkboxMarkedCircleOutline() : null,
+        suffixIcon: nameFieldValid.value ? SvgIcon.checkboxMarkedCircleOutline() : null,
         suffixIconConstraints: const BoxConstraints(
           minWidth: 0,
           minHeight: 0,
@@ -107,10 +149,20 @@ class NameField extends HookConsumerWidget {
       textInputAction: TextInputAction.next,
       onChanged: (newValue) {
         nameFieldValid.value = newValue.isNotEmpty;
+        ref.read(registrationProvider).name = newValue;
       },
     );
   }
 }
+
+final checkEmail = FutureProvider.family<bool, String>((ref, email) async {
+  final dio = ref.watch(dioProvider);
+  final response = (await dio.get<bool>(
+    '/register/check_email',
+    queryParameters: {'email': email},
+  ));
+  return response.data == true;
+});
 
 class EmailField extends HookConsumerWidget {
   const EmailField({Key? key}) : super(key: key);
@@ -126,9 +178,7 @@ class EmailField extends HookConsumerWidget {
       decoration: InputDecoration(
         hintText: 'Email',
         errorText: emailFieldErrorText.value,
-        suffixIcon: emailFieldValid.value
-            ? SvgIcon.checkboxMarkedCircleOutline()
-            : null,
+        suffixIcon: emailFieldValid.value ? SvgIcon.checkboxMarkedCircleOutline() : null,
         suffixIconConstraints: const BoxConstraints(
           minWidth: 0,
           minHeight: 0,
@@ -155,6 +205,8 @@ class EmailField extends HookConsumerWidget {
               return;
             }
 
+            print('ici');
+
             final isAvailable = await ref.read(checkEmail(newValue).future);
             if (!isAvailable) {
               emailFieldErrorText.value = 'This email is already in use.';
@@ -162,6 +214,7 @@ class EmailField extends HookConsumerWidget {
             }
 
             emailFieldValid.value = true;
+            ref.read(registrationProvider).email = newValue;
           },
         );
       },
@@ -177,18 +230,14 @@ class DateField extends HookConsumerWidget {
     final pickedDate = useState<DateTime?>(null);
 
     final dateController = useTextEditingController()
-      ..text = pickedDate.value != null
-          ? DateFormat('d MMMM y').format(pickedDate.value!)
-          : '';
+      ..text = pickedDate.value != null ? DateFormat('d MMMM y').format(pickedDate.value!) : '';
 
     return TextField(
       controller: dateController,
       readOnly: true,
       decoration: InputDecoration(
         hintText: 'Date of birth',
-        suffixIcon: pickedDate.value != null
-            ? SvgIcon.checkboxMarkedCircleOutline()
-            : null,
+        suffixIcon: pickedDate.value != null ? SvgIcon.checkboxMarkedCircleOutline() : null,
         suffixIconConstraints: const BoxConstraints(
           minWidth: 0,
           minHeight: 0,
@@ -202,6 +251,10 @@ class DateField extends HookConsumerWidget {
           firstDate: DateTime(now.year - 100),
           lastDate: now,
         );
+
+        if (pickedDate.value != null) {
+          ref.read(registrationProvider).birthDate = pickedDate.value!;
+        }
       },
     );
   }

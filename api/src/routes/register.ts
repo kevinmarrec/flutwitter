@@ -6,29 +6,34 @@ export default fp(async fastify => {
 
   const registerSchema = {
     body: Type.Object({
+      name: Type.String({ maxLength: 50 }),
       email: Type.String({ format: 'email' }),
-      password: Type.String({ minLength: 8 })
+      birthDate: Type.String({ format: 'date-time' })
     })
   }
 
   fastify.post<{ Body: Static<typeof registerSchema.body> }>('/register', { schema: registerSchema }, async (req, reply) => {
-    const { email, password } = req.body
+    const { name, email, birthDate } = req.body
 
     if (await fastify.prisma.user.findUnique({ where: { email } })) {
       return reply.conflict(`Email "${email}" is already associated to an existing user`)
     }
 
-    const user = await fastify.prisma.user.create({
+    if (await fastify.prisma.registration.findUnique({ where: { email } })) {
+      return reply.conflict(`Email "${email}" is already associated to a pending registration`)
+    }
+
+    await fastify.prisma.registration.create({
       data: {
         email,
-        password
+        name,
+        birthDate: new Date(birthDate),
+        verificationCode: '999999'
       }
     })
 
-    return {
-      token: fastify.jwt.sign({ id: user.id }),
-      user
-    }
+    reply.status(201)
+    reply.send(`Registration for email '${email}' has been created`)
   })
 
 

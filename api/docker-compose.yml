@@ -6,7 +6,6 @@ services:
       target: base
       context: .
     restart: unless-stopped
-    env_file: .env
     environment:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/rdb
     networks:
@@ -18,6 +17,21 @@ services:
     depends_on:
       - db
     command: pnpm dev
+
+  studio:
+    build:
+      target: base
+      context: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/rdb
+    networks:
+      - net
+    ports:
+      - "5555:5555"
+    depends_on:
+      - db
+    command: pnpm studio
 
   db:
     image: postgres

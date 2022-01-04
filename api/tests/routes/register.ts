@@ -1,36 +1,28 @@
 describe('/register', () => {
-  test('registers new user & returns it with token', async () => {
-    const payload = {
-      email: 'x@y.z',
-      password: 'foobar42'
-    }
+  const registrationPayload = {
+    name: 'foo',
+    email: 'x@y.z',
+    birthDate: new Date()
+  }
 
+  test('creates a new registration', async () => {
     const response = await server.inject({
       method: 'POST',
       url: '/register',
-      payload
+      payload: registrationPayload
     })
 
-    expect(response.statusCode).toBe(200)
+    expect(response.statusCode).toBe(201)
 
-    const users = await server.prisma.user.findMany()
+    const registration = await server.prisma.registration.findFirst()
 
-    expect(users.length).toBe(1)
-    expect(users[0].email).toBe(payload.email)
-
-    const body = response.json()
-
-    expect(body.token).toBeTruthy()
-    expect(body.user).toEqual(expect.objectContaining({
-      id: users[0].id,
-      email: users[0].email
-    }))
+    expect(registration).toEqual(expect.objectContaining(registrationPayload))
   })
 
-  test('returns 409 Conflict when email is already used', async () => {
-    const user = await server.prisma.user.create({
+  test('returns 409 Conflict when email is already associated to an existing user', async () => {
+    await server.prisma.user.create({
       data: {
-        email: 'x@y.z',
+        email: registrationPayload.email,
         password: 'foobar42'
       }
     })
@@ -38,15 +30,30 @@ describe('/register', () => {
     const response = await server.inject({
       method: 'POST',
       url: '/register',
-      payload: {
-        email: user.email,
-        password: user.password
+      payload: registrationPayload
+    })
+
+    expect(response.statusCode).toBe(409)
+  })
+
+  test('returns 409 Conflict when email is already associated to a pending registration', async () => {
+    await server.prisma.registration.create({
+      data: {
+        ...registrationPayload,
+        verificationCode: ''
       }
+    })
+
+    const response = await server.inject({
+      method: 'POST',
+      url: '/register',
+      payload: registrationPayload
     })
 
     expect(response.statusCode).toBe(409)
   })
 })
+
 
 describe('/register/check_email', () => {
   test('returns true if email is not already in use', async () => {

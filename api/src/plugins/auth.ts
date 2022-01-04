@@ -18,11 +18,11 @@ declare module 'fastify-jwt' {
 
 export default fp(async (fastify) => {
   fastify.register(fastifyJWTPlugin, { secret: process.env.JWT_SECRET || 'supersecret' })
-  fastify.decorate<preValidationAsyncHookHandler>('authenticate', async function (request, reply) {
-    try {
-      await request.jwtVerify()
-    } catch (err) {
-      reply.send(err)
-    }
-  })
+  // fastify.decorate<preValidationAsyncHookHandler>('authenticate', async function (request, reply) {
+  //   try {
+  //     await request.jwtVerify()
+  //   } catch (err) {
+  //     reply.send(err)
+  //   }
+  // })
 })

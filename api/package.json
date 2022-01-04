@@ -4,12 +4,13 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "LOGGER=true nodemon -w src --ext ts,json --exec node -r jiti/register src | pino-colada",
+    "dev": "LOGGER=true nodemon -w src --ext ts,json --exec node -r jiti/register src",
     "start": "node -r jiti/register src",
     "db:init": "prisma migrate dev -n init",
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset --skip-seed",
     "db:seed": "jiti prisma/seed",
+    "db:status": "prisma migrate status",
     "studio": "prisma studio",
     "lint": "eslint . --ext .ts,.js",
     "test": "jest"
@@ -37,7 +38,7 @@
     "knex-cleaner": "^1.3.1",
     "nodemon": "^2.0.15",
     "pg": "^8.7.1",
-    "pino-colada": "^2.2.2",
+    "pino-pretty": "^7.3.0",
     "prisma": "^3.7.0",
     "ts-jest": "^27.1.2",
     "typescript": "^4.5.4"

@@ -13,3 +13,11 @@ model User {
   email    String @unique
   password String
 }
+
+model Registration {
+  email            String   @unique
+  name             String
+  birthDate        DateTime
+  verificationCode String
+  createdAt        DateTime @default(now())
+}

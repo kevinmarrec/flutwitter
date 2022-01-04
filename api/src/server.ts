@@ -3,7 +3,12 @@ import path from 'path'
 
 export async function createServer (): Promise<FastifyInstance> {
   const server = fastify({
-    logger: process.env.LOGGER === 'true'
+    logger: process.env.LOGGER === 'true' && /* istanbul ignore next */ {
+      prettyPrint: {
+        colorize: true,
+        translateTime: 'SYS:HH:MM:ss.l p'
+      }
+    }
   })
 
   // Enable TypeScript support for `fastify-autoload` plugin
