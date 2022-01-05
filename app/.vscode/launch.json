@@ -5,25 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "App",
-      "cwd": "${workspaceFolder}/app",
+      "name": "Debug",
       "type": "dart",
       "request": "launch",
     },
     {
-      "name": "App (profile)",
-      "cwd": "${workspaceFolder}/app",
+      "name": "Debug (profile)",
       "type": "dart",
       "request": "launch",
       "flutterMode": "profile"
-    },
-    {
-      "name": "API",
-      "cwd": "${workspaceFolder}/api",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev"]
     }
   ]
 }

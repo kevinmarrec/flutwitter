@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "docker: start db",
+      "type": "shell",
+      "command": "docker-compose -p flutwitter up -d db",
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      }
+    },
+    {
+      "label": "docker: stop db",
+      "type": "shell",
+      "command": "docker-compose -p flutwitter stop db",
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      }
+    },
+    {
+      "label": "docker: start studio",
+      "type": "shell",
+      "command": "docker-compose -p flutwitter up -d studio",
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      }
+    },
+    {
+      "label": "docker: stop studio",
+      "type": "shell",
+      "command": "docker-compose -p flutwitter stop studio",
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      }
+    }
+  ]
+}
