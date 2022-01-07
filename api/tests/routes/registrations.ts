@@ -22,6 +22,7 @@ describe('POST /registrations', () => {
 
     const registration = await server.prisma.registration.findFirst()
 
+    expect(registration).toBeTruthy()
     expect(registration).toEqual(expect.objectContaining(registrationPayload))
   })
 
@@ -103,7 +104,7 @@ describe('GET /registrations/check_email', () => {
 
 
 describe('POST /registrations/:id/verify', () => {
-  test('returns true if verification code is correct', async () => {
+  test('returns registration if verification code is correct', async () => {
     const registration = await createRegistration()
 
     const response = await server.inject({
@@ -115,7 +116,9 @@ describe('POST /registrations/:id/verify', () => {
     })
 
     expect(response.statusCode).toBe(200)
-    expect(response.json()).toBe(true)
+    expect(response.json()).toEqual(expect.objectContaining({
+      email: registration.email
+    }))
   })
 
   test('returns 404 Not Found if registration does not exist', async () => {
@@ -128,5 +131,71 @@ describe('POST /registrations/:id/verify', () => {
     })
 
     expect(response.statusCode).toBe(404)
+  })
+
+  test('returns 403 Forbidden if verification code is incorrect', async () => {
+    const registration = await createRegistration()
+
+    const response = await server.inject({
+      method: 'POST',
+      url: `/registrations/${registration.id}/verify`,
+      payload: {
+        verificationCode: '000000'
+      }
+    })
+
+    expect(response.statusCode).toBe(403)
+  })
+})
+
+describe('POST /registrations/:id/complete', () => {
+  test('creates user & deletes registration when a registration is completed', async () => {
+    const registration = await createRegistration()
+
+    const response = await server.inject({
+      method: 'POST',
+      url: `/registrations/${registration.id}/complete`,
+      payload: {
+        password: faker.internet.password(8),
+        verificationCode: registration.verificationCode
+      }
+    })
+
+    expect(response.statusCode).toBe(200)
+
+    const user = await server.prisma.user.findFirst({ select: { email: true } })
+
+    expect(user).toBeTruthy()
+    expect(user?.email).toEqual(registration.email)
+
+    expect(await server.prisma.registration.count()).toBe(0)
+  })
+
+  test('returns 404 Not Found if registration does not exist', async () => {
+    const response = await server.inject({
+      method: 'POST',
+      url: '/registrations/1/complete',
+      payload: {
+        password: faker.internet.password(8),
+        verificationCode: '000000'
+      }
+    })
+
+    expect(response.statusCode).toBe(404)
+  })
+
+  test('returns 403 Forbidden if verification code is incorrect', async () => {
+    const registration = await createRegistration()
+
+    const response = await server.inject({
+      method: 'POST',
+      url: `/registrations/${registration.id}/complete`,
+      payload: {
+        password: faker.internet.password(8),
+        verificationCode: '000000'
+      }
+    })
+
+    expect(response.statusCode).toBe(403)
   })
 })

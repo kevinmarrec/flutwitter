@@ -25,6 +25,8 @@ specifiers:
   pg: ^8.7.1
   pino-pretty: ^7.3.0
   prisma: ^3.7.0
+  remove-accents: ^0.4.2
+  scule: ^0.2.1
   ts-jest: ^27.1.2
   typescript: ^4.5.4
 
@@ -38,6 +40,8 @@ dependencies:
   fastify-plugin: 3.0.0
   fastify-sensible: 3.1.2
   jiti: 1.12.9
+  remove-accents: 0.4.2
+  scule: 0.2.1
 
 devDependencies:
   '@types/faker': 5.5.9
@@ -3799,6 +3803,10 @@ packages:
       rc: 1.2.8
     dev: true
 
+  /remove-accents/0.4.2:
+    resolution: {integrity: sha1-CkPTqq4egNuRngeuJUsoXZ4ce7U=}
+    dev: false
+
   /require-directory/2.1.1:
     resolution: {integrity: sha1-jGStX9MNqxyXbiNE/+f3kqam30I=}
     engines: {node: '>=0.10.0'}
@@ -3891,6 +3899,10 @@ packages:
     dependencies:
       xmlchars: 2.2.0
     dev: true
+
+  /scule/0.2.1:
+    resolution: {integrity: sha512-M9gnWtn3J0W+UhJOHmBxBTwv8mZCan5i1Himp60t6vvZcor0wr+IM0URKmIglsWJ7bRujNAVVN77fp+uZaWoKg==}
+    dev: false
 
   /secure-json-parse/2.4.0:
     resolution: {integrity: sha512-Q5Z/97nbON5t/L/sH6mY2EacfjVGwrCcSi5D3btRO2GZ8pf1K1UN7Z9H5J57hjVU2Qzxr1xO+FmBhOvEkzCMmg==}

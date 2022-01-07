@@ -1,5 +1,10 @@
 import fp from 'fastify-plugin'
 import { Static, Type } from '@sinclair/typebox'
+import removeAccents from 'remove-accents'
+
+function generateUniqueUsername (name: string) {
+  return removeAccents(name).split(' ').join('')
+}
 
 export default fp(async fastify => {
   // POST /registrations
@@ -89,6 +94,56 @@ export default fp(async fastify => {
         return reply.notFound('Registration not found')
       }
 
-      return registration.verificationCode === verificationCode
+      if (verificationCode !== registration.verificationCode) {
+        return reply.forbidden('Incorrect verification code')
+      }
+
+      return registration
+    })
+
+  // POST /registrations/:id/complete
+
+  const completeSchema = {
+    params: Type.Object({
+      id: Type.Number()
+    }),
+    body: Type.Object({
+      password: Type.String({ minLength: 8 }),
+      verificationCode: Type.Number({ pattern: '^\\d{6}$' })
+    })
+  }
+
+  fastify.post<{ Params: Static<typeof completeSchema.params>, Body: Static<typeof completeSchema.body> }>(
+    '/registrations/:id/complete',
+    { schema: completeSchema },
+    async (req, reply) => {
+      const { id } = req.params
+      const { password, verificationCode } = req.body
+
+      const registration = await fastify.prisma.registration.findUnique({ where: { id }})
+
+      if (!registration) {
+        return reply.notFound('Registration not found')
+      }
+
+      if (verificationCode !== registration.verificationCode) {
+        return reply.forbidden('Incorrect verification code')
+      }
+
+      const { email, name, birthDate } = registration
+
+      const user = await fastify.prisma.user.create({
+        data: {
+          email,
+          name,
+          birthDate,
+          password,
+          username: generateUniqueUsername(name)
+        }
+      })
+
+      await fastify.prisma.registration.delete({ where: { id: registration.id } })
+
+      return user
     })
 })
