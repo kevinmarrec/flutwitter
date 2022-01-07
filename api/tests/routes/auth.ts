@@ -1,11 +1,8 @@
-describe('/auth/login', () => {
+import { createUser } from '../helpers/users'
+
+describe('POST /auth/login', () => {
   test('returns authenticated user with token', async () => {
-    const user = await server.prisma.user.create({
-      data: {
-        email: 'x@y.z',
-        password: 'foobar42'
-      }
-    })
+    const user = await createUser()
 
     const response = await server.inject({
       method: 'POST',

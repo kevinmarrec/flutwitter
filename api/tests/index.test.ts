@@ -35,5 +35,5 @@ describe ('routes', () => {
   })
 
   require('./routes/auth')
-  require('./routes/register')
+  require('./routes/registrations')
 })
