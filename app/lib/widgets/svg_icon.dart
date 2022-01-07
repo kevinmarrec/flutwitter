@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../theme.dart';
+import 'package:flutwitter/theme.dart';
 
 class SvgIcon extends StatelessWidget {
   final String icon;

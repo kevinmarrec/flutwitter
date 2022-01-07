@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutwitter/router/router.dart';
+import 'package:flutwitter/theme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import './router/router.dart';
-import './theme.dart';
 
 void main() async => runApp(const ProviderScope(child: MyApp()));
 

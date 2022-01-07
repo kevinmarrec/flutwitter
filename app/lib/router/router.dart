@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import './transitions/page_slide_transition.dart';
-import '../screens/all.dart';
+import 'package:flutwitter/router/transitions/page_slide_transition.dart';
+import 'package:flutwitter/screens/all.dart';
 
 class AppRouter {
   static String initialRoute = WelcomeScreen.routeName;

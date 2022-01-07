@@ -3,11 +3,10 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutwitter/shared/dio.dart';
+import 'package:flutwitter/widgets/svg_icon.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
-
-import '../shared/dio.dart';
-import '../widgets/svg_icon.dart';
 
 class Registration {
   Registration({
@@ -26,7 +25,7 @@ final registrationProvider = StateProvider<Registration>(
 );
 
 class CreateAccountScreen extends HookConsumerWidget {
-  static const routeName = '/register/create';
+  static const routeName = '/registration/create_account';
 
   const CreateAccountScreen({Key? key}) : super(key: key);
 
@@ -67,7 +66,7 @@ class CreateAccountScreen extends HookConsumerWidget {
 
                     try {
                       await ref.read(dioProvider).post(
-                        '/register',
+                        '/registrations',
                         data: {
                           'email': registration.email,
                           'name': registration.name,
@@ -158,7 +157,7 @@ class NameField extends HookConsumerWidget {
 final checkEmail = FutureProvider.family<bool, String>((ref, email) async {
   final dio = ref.watch(dioProvider);
   final response = (await dio.get<bool>(
-    '/register/check_email',
+    '/registrations/check_email',
     queryParameters: {'email': email},
   ));
   return response.data == true;
