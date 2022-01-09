@@ -18,11 +18,8 @@ model User {
   createdAt DateTime @default(now())
 }
 
-model Registration {
-  id               Int      @id @default(autoincrement())
-  email            String   @unique
-  name             String
-  birthDate        DateTime
-  verificationCode Int
-  createdAt        DateTime @default(now())
+model EmailVerification {
+  email     String   @unique
+  code      Int
+  createdAt DateTime @default(now())
 }

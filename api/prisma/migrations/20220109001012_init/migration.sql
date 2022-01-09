@@ -12,19 +12,14 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "Registration" (
-    "id" SERIAL NOT NULL,
+CREATE TABLE "EmailVerification" (
     "email" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "birthDate" TIMESTAMP(3) NOT NULL,
-    "verificationCode" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "Registration_pkey" PRIMARY KEY ("id")
+    "code" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Registration_email_key" ON "Registration"("email");
+CREATE UNIQUE INDEX "EmailVerification_email_key" ON "EmailVerification"("email");
