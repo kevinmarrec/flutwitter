@@ -29,6 +29,12 @@ export default fp(async fastify => {
         update: { email, code }
       })
 
+      fastify.mailer.sendMail({
+        subject: 'FluTwitter Verification Code',
+        to: email,
+        text: code.toString()
+      })
+
       reply.status(201)
       reply.send()
     })
