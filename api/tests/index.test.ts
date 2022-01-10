@@ -5,6 +5,12 @@ import { setupDatabase, cleanDatabase, destroyDatabase } from './helpers/databas
 
 dotenv.config({ path: '.env.test' })
 
+jest.mock('nodemailer', () => ({
+  createTransport: jest.fn().mockReturnValue({
+    sendMail: jest.fn()
+  })
+}))
+
 beforeAll(async () => {
   await setupDatabase()
   global.server = await createServer()

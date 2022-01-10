@@ -7,7 +7,6 @@ declare module 'fastify' {
   }
 }
 
-
 export default fp(async (fastify) => {
   fastify.decorate('mailer', createTransport({
     host: process.env.MAILER_HOST,
