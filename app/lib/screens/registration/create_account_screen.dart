@@ -3,34 +3,20 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutwitter/screens/registration/verify_code_screen.dart';
 import 'package:flutwitter/shared/dio.dart';
+import 'package:flutwitter/shared/registration.dart';
 import 'package:flutwitter/widgets/svg_icon.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
-class Registration {
-  Registration({
-    required this.name,
-    required this.email,
-    required this.birthDate,
-  });
-
-  String name;
-  String email;
-  DateTime birthDate;
-}
-
-final registrationProvider = StateProvider<Registration>(
-  (_) => Registration(name: '', email: '', birthDate: DateTime.now()),
-);
-
-class CreateAccountScreen extends HookConsumerWidget {
+class CreateAccountScreen extends StatelessWidget {
   static const routeName = '/registration/create_account';
 
   const CreateAccountScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: SvgIcon.twitter(),
@@ -60,45 +46,50 @@ class CreateAccountScreen extends HookConsumerWidget {
                   child: const CreateAccountForm(),
                 ),
                 const Spacer(flex: 2),
-                ElevatedButton(
-                  onPressed: () async {
-                    final registration = ref.read(registrationProvider);
+                Consumer(
+                  builder: (context, ref, _) {
+                    final registration = ref.watch(registrationProvider);
 
-                    try {
-                      await ref.read(dioProvider).post(
-                        '/registrations',
-                        data: {
-                          'email': registration.email,
-                          'name': registration.name,
-                          'birthDate': registration.birthDate.toUtc().toIso8601String(),
-                        },
-                      );
+                    return ElevatedButton(
+                      onPressed: registration.isValid
+                          ? () async {
+                              try {
+                                await ref.read(dioProvider).post(
+                                  '/email_verifications',
+                                  data: {'email': registration.email},
+                                );
+                                Navigator.pushNamed(context, VerifyCodeScreen.routeName);
+                              } catch (e) {
+                                String message = "Can't complete your signup right now.";
 
-                      print('Success');
-                    } catch (e) {
-                      if (e is DioError) {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: const Text("Can't complete your signup right now."),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  'Close',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      }
-                    }
+                                if (e is DioError && e.response!.statusCode == 429) {
+                                  message = "You've exceeded the number of attempts. Please try again later.";
+                                }
+
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    content: Text(message),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          'Close',
+                                          style: Theme.of(context).textTheme.bodyText1,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }
+                            }
+                          : null,
+                      child: const Text('Sign up'),
+                    );
                   },
-                  child: const Text('Sign up'),
-                )
+                ),
               ],
             ),
           ),
@@ -130,15 +121,18 @@ class NameField extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final nameFieldValid = useState(false);
+    final name = ref.watch(registrationProvider.select((r) => r.name));
 
     return TextField(
+      controller: useTextEditingController(
+        text: name,
+      ),
       keyboardType: TextInputType.name,
       autofillHints: const [AutofillHints.name],
       autofocus: true,
       decoration: InputDecoration(
         hintText: 'Name',
-        suffixIcon: nameFieldValid.value ? SvgIcon.checkboxMarkedCircleOutline() : null,
+        suffixIcon: name.isNotEmpty ? SvgIcon.checkboxMarkedCircleOutline() : null,
         suffixIconConstraints: const BoxConstraints(
           minWidth: 0,
           minHeight: 0,
@@ -147,21 +141,11 @@ class NameField extends HookConsumerWidget {
       maxLength: 50,
       textInputAction: TextInputAction.next,
       onChanged: (newValue) {
-        nameFieldValid.value = newValue.isNotEmpty;
-        ref.read(registrationProvider).name = newValue;
+        ref.read(registrationProvider.notifier).state = ref.read(registrationProvider).copyWith(name: newValue);
       },
     );
   }
 }
-
-final checkEmail = FutureProvider.family<bool, String>((ref, email) async {
-  final dio = ref.watch(dioProvider);
-  final response = (await dio.get<bool>(
-    '/registrations/check_email',
-    queryParameters: {'email': email},
-  ));
-  return response.data == true;
-});
 
 class EmailField extends HookConsumerWidget {
   const EmailField({Key? key}) : super(key: key);
@@ -172,6 +156,9 @@ class EmailField extends HookConsumerWidget {
     final emailFieldValid = useState(false);
 
     return TextField(
+      controller: useTextEditingController(
+        text: ref.read(registrationProvider).email,
+      ),
       keyboardType: TextInputType.emailAddress,
       autofillHints: const [AutofillHints.email],
       decoration: InputDecoration(
@@ -193,9 +180,11 @@ class EmailField extends HookConsumerWidget {
         emailFieldErrorText.value = null;
         emailFieldValid.value = false;
 
+        ref.read(registrationProvider.notifier).state = ref.read(registrationProvider).copyWith(email: '');
+
         EasyDebounce.debounce(
           'emailValidation',
-          const Duration(seconds: 1),
+          const Duration(milliseconds: 500),
           () async {
             if (!RegExp(
               r"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$",
@@ -204,16 +193,19 @@ class EmailField extends HookConsumerWidget {
               return;
             }
 
-            print('ici');
+            final checkEmailResponse = await ref.read(dioProvider).get<bool>(
+              '/users/check_email_availability',
+              queryParameters: {'email': newValue},
+            );
 
-            final isAvailable = await ref.read(checkEmail(newValue).future);
-            if (!isAvailable) {
+            if (checkEmailResponse.data != true) {
               emailFieldErrorText.value = 'This email is already in use.';
               return;
             }
 
+            ref.read(registrationProvider.notifier).state = ref.read(registrationProvider).copyWith(email: newValue);
+
             emailFieldValid.value = true;
-            ref.read(registrationProvider).email = newValue;
           },
         );
       },
@@ -226,17 +218,18 @@ class DateField extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pickedDate = useState<DateTime?>(null);
+    final birthDate = ref.watch(registrationProvider.select((r) => r.birthDate));
 
-    final dateController = useTextEditingController()
-      ..text = pickedDate.value != null ? DateFormat('d MMMM y').format(pickedDate.value!) : '';
+    final controller = useTextEditingController()
+      ..text =
+          birthDate != null ? DateFormat('d MMMM y', Localizations.localeOf(context).toString()).format(birthDate) : '';
 
     return TextField(
-      controller: dateController,
+      controller: controller,
       readOnly: true,
       decoration: InputDecoration(
         hintText: 'Date of birth',
-        suffixIcon: pickedDate.value != null ? SvgIcon.checkboxMarkedCircleOutline() : null,
+        suffixIcon: birthDate != null ? SvgIcon.checkboxMarkedCircleOutline() : null,
         suffixIconConstraints: const BoxConstraints(
           minWidth: 0,
           minHeight: 0,
@@ -244,15 +237,18 @@ class DateField extends HookConsumerWidget {
       ),
       onTap: () async {
         DateTime now = DateTime.now();
-        pickedDate.value = await showDatePicker(
+
+        final pickedDate = await showDatePicker(
           context: context,
+          initialEntryMode: DatePickerEntryMode.input,
           initialDate: now,
           firstDate: DateTime(now.year - 100),
           lastDate: now,
         );
 
-        if (pickedDate.value != null) {
-          ref.read(registrationProvider).birthDate = pickedDate.value!;
+        if (pickedDate != null) {
+          ref.read(registrationProvider.notifier).state =
+              ref.read(registrationProvider).copyWith(birthDate: pickedDate);
         }
       },
     );

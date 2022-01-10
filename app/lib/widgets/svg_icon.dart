@@ -15,8 +15,7 @@ class SvgIcon extends StatelessWidget {
   }) : super(key: key);
 
   factory SvgIcon.twitter() => const SvgIcon('twitter', height: 28);
-  factory SvgIcon.checkboxMarkedCircleOutline() =>
-      const SvgIcon('checkbox-marked-circle-outline', color: Colors.green);
+  factory SvgIcon.checkboxMarkedCircleOutline() => const SvgIcon('checkbox-marked-circle-outline', color: Colors.green);
 
   @override
   Widget build(BuildContext context) {
