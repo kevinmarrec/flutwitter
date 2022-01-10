@@ -1,7 +1,7 @@
 import faker from 'faker'
 import { createSigner } from 'fast-jwt'
 
-import { createEmailVerification } from '../helpers/email_verifications'
+import { createEmailVerification } from '../helpers/emailVerifications'
 import { createUser, makeUser } from '../helpers/users'
 
 describe('POST /users', () => {

@@ -1,7 +1,7 @@
 import type { EmailVerification } from '@prisma/client'
 import faker from 'faker'
 
-import { createEmailVerification } from '../helpers/email_verifications'
+import { createEmailVerification } from '../helpers/emailVerifications'
 import { createUser } from '../helpers/users'
 
 describe('POST /email_verifications', () => {

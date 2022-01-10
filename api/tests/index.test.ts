@@ -41,6 +41,6 @@ describe ('routes', () => {
   })
 
   require('./routes/auth')
-  require('./routes/email_verifications')
+  require('./routes/emailVerifications')
   require('./routes/users')
 })

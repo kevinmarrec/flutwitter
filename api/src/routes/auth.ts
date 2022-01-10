@@ -11,8 +11,8 @@ export default fp(async fastify => {
     })
   }
 
-  fastify.post<{ Body: Static<typeof loginSchema.body> }>('/auth/login', { schema: loginSchema }, async (req, reply) => {
-    const { email, password } = req.body
+  fastify.post<{ Body: Static<typeof loginSchema.body> }>('/auth/login', { schema: loginSchema }, async (request, reply) => {
+    const { email, password } = request.body
 
     const user = await fastify.prisma.user.findFirst({
       where: {

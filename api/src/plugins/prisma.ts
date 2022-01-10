@@ -7,7 +7,7 @@ declare module 'fastify' {
   }
 }
 
-export default fp(async fastify => {
+export default fp(async (fastify) => {
   const client = new PrismaClient()
   fastify.decorate('prisma', client)
   fastify.addHook('onClose', async () => {

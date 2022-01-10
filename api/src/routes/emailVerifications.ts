@@ -13,9 +13,17 @@ export default fp(async fastify => {
 
   fastify.post<{ Body: Static<typeof createSchema.body> }>(
     '/email_verifications',
-    { schema: createSchema },
-    async (req, reply) => {
-      const { email } = req.body
+    {
+      schema: createSchema,
+      config: {
+        rateLimit: {
+          max: 3,
+          timeWindow: '10 minutes'
+        }
+      }
+    },
+    async (request, reply) => {
+      const { email } = request.body
 
       if (await fastify.prisma.user.findUnique({ where: { email } })) {
         return reply.badRequest('Email "${email}" is already associated to an existing user')
@@ -51,8 +59,8 @@ export default fp(async fastify => {
   fastify.post<{ Body: Static<typeof verifySchema.body> }>(
     '/email_verifications/verify',
     { schema: verifySchema },
-    async (req, reply) => {
-      const { email, code } = req.body
+    async (request, reply) => {
+      const { email, code } = request.body
 
       const emailVerification = await fastify.prisma.emailVerification.findFirst({ where: { email, code }})
 

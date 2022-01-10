@@ -25,11 +25,12 @@ export default fp(async fastify => {
   fastify.post<{ Headers: Static<typeof createSchema.headers>, Body: Static<typeof createSchema.body> }>(
     '/users',
     { schema: createSchema },
-    async (req, reply) => {
-      const { email, password, name, birthDate } = req.body
+    async (request, reply) => {
+      const { authorization: authorizationHeader } = request.headers
+      const { email, password, name, birthDate } = request.body
 
       try {
-        const decoded = createVerifier({ key: process.env.EMAIL_VERIFICATION_JWT_SECRET || 'supersecret' })(req.headers.authorization) as { email: string }
+        const decoded = createVerifier({ key: process.env.EMAIL_VERIFICATION_JWT_SECRET || 'supersecret' })(authorizationHeader) as { email: string }
         if (decoded.email !== email) {
           return reply.forbidden()
         }
@@ -72,8 +73,8 @@ export default fp(async fastify => {
   fastify.get<{ Querystring: Static<typeof checkEmailSchema.querystring> }>(
     '/users/check_email_availability',
     { schema: checkEmailSchema },
-    async (req) => {
-      const { email } = req.query
+    async (request) => {
+      const { email } = request.query
       return await fastify.prisma.user.count({ where: { email } }) === 0
     })
 
