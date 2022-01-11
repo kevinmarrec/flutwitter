@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,38 +51,13 @@ class CreateAccountScreen extends StatelessWidget {
 
                     return ElevatedButton(
                       onPressed: registration.isValid
-                          ? () async {
-                              try {
-                                await ref.read(dioProvider).post(
-                                  '/email_verifications',
-                                  data: {'email': registration.email},
-                                );
-                                Navigator.pushNamed(context, VerifyCodeScreen.routeName);
-                              } catch (e) {
-                                String message = "Can't complete your signup right now.";
-
-                                if (e is DioError && e.response!.statusCode == 429) {
-                                  message = "You've exceeded the number of attempts. Please try again later.";
-                                }
-
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    content: Text(message),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text(
-                                          'Close',
-                                          style: Theme.of(context).textTheme.bodyText1,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                );
-                              }
+                          ? () {
+                              registration.sendVerificationEmail(
+                                context: context,
+                                onSuccess: () {
+                                  Navigator.pushNamed(context, VerifyCodeScreen.routeName);
+                                },
+                              );
                             }
                           : null,
                       child: const Text('Sign up'),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutwitter/screens/registration/create_account_screen.dart';
-import 'package:flutwitter/theme.dart';
+import 'package:flutwitter/shared/theme.dart';
 import 'package:flutwitter/widgets/svg_icon.dart';
 
 class WelcomeScreen extends StatelessWidget {

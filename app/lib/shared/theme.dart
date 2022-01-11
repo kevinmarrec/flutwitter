@@ -18,6 +18,9 @@ ThemeData getTheme() {
         statusBarColor: backgroundColor,
       ),
     ),
+    bottomAppBarTheme: darkTheme.bottomAppBarTheme.copyWith(
+      color: backgroundColor,
+    ),
     colorScheme: darkTheme.colorScheme.copyWith(
       primary: primaryColor,
     ),
