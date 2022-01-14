@@ -1,5 +1,6 @@
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutwitter/l10n/l10n.dart';
 import 'package:flutwitter/shared/dio.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -47,11 +48,10 @@ class Registration {
       );
       onSuccess?.call();
     } catch (e) {
+      final l10n = AppLocalizations.of(context)!;
       final tooManyRequests = e is DioError && e.response!.statusCode == 429;
       context.showToast(
-        tooManyRequests
-            ? "You've exceeded the number of attempts.\nPlease try again later."
-            : "Can't complete your signup right now.",
+        tooManyRequests ? l10n.registrationToastTooManyAttempts : l10n.registrationToastError,
         backgroundColor: Colors.white,
         textStyle: const TextStyle(color: Colors.black),
       );
@@ -73,7 +73,7 @@ class Registration {
       onSuccess?.call();
     } catch (e) {
       context.showToast(
-        'The code you entered is incorrect.\nPlease try again.',
+        AppLocalizations.of(context)!.registrationToastIncorrectCode,
         backgroundColor: Colors.white,
         textStyle: const TextStyle(color: Colors.black),
       );

@@ -2,12 +2,12 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutwitter/l10n/l10n.dart';
 import 'package:flutwitter/screens/registration/verify_code_screen.dart';
 import 'package:flutwitter/shared/dio.dart';
 import 'package:flutwitter/shared/registration.dart';
 import 'package:flutwitter/widgets/svg_icon.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
 class CreateAccountScreen extends StatelessWidget {
   static const routeName = '/registration/create_account';
@@ -16,6 +16,8 @@ class CreateAccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         title: SvgIcon.twitter(),
@@ -35,7 +37,7 @@ class CreateAccountScreen extends StatelessWidget {
               children: [
                 Center(
                   child: Text(
-                    'Create your account',
+                    l10n.createAccountScreenTitle,
                     style: Theme.of(context).textTheme.headline4,
                   ),
                 ),
@@ -60,7 +62,7 @@ class CreateAccountScreen extends StatelessWidget {
                               );
                             }
                           : null,
-                      child: const Text('Sign up'),
+                      child: Text(l10n.next),
                     );
                   },
                 ),
@@ -105,7 +107,7 @@ class NameField extends HookConsumerWidget {
       autofillHints: const [AutofillHints.name],
       autofocus: true,
       decoration: InputDecoration(
-        hintText: 'Name',
+        hintText: AppLocalizations.of(context)!.createAccountScreenNameFieldPlaceholder,
         suffixIcon: name.isNotEmpty ? SvgIcon.checkboxMarkedCircleOutline() : null,
         suffixIconConstraints: const BoxConstraints(
           minWidth: 0,
@@ -126,6 +128,7 @@ class EmailField extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final emailFieldErrorText = useState<String?>(null);
     final emailFieldValid = useState(false);
 
@@ -136,7 +139,7 @@ class EmailField extends HookConsumerWidget {
       keyboardType: TextInputType.emailAddress,
       autofillHints: const [AutofillHints.email],
       decoration: InputDecoration(
-        hintText: 'Email',
+        hintText: l10n.createAccountScreenEmailFieldPlaceholder,
         errorText: emailFieldErrorText.value,
         suffixIcon: emailFieldValid.value ? SvgIcon.checkboxMarkedCircleOutline() : null,
         suffixIconConstraints: const BoxConstraints(
@@ -163,7 +166,7 @@ class EmailField extends HookConsumerWidget {
             if (!RegExp(
               r"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$",
             ).hasMatch(newValue)) {
-              emailFieldErrorText.value = 'Please enter a valid email.';
+              emailFieldErrorText.value = l10n.createAccountScreenEmailErrorInvalid;
               return;
             }
 
@@ -173,7 +176,7 @@ class EmailField extends HookConsumerWidget {
             );
 
             if (checkEmailResponse.data != true) {
-              emailFieldErrorText.value = 'This email is already in use.';
+              emailFieldErrorText.value = l10n.createAccountScreenEmailErrorTaken;
               return;
             }
 
@@ -202,7 +205,7 @@ class DateField extends HookConsumerWidget {
       controller: controller,
       readOnly: true,
       decoration: InputDecoration(
-        hintText: 'Date of birth',
+        hintText: AppLocalizations.of(context)!.createAccountScreenBirthDateFieldPlaceholder,
         suffixIcon: birthDate != null ? SvgIcon.checkboxMarkedCircleOutline() : null,
         suffixIconConstraints: const BoxConstraints(
           minWidth: 0,

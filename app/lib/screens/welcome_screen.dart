@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutwitter/l10n/l10n.dart';
 import 'package:flutwitter/screens/registration/create_account_screen.dart';
-import 'package:flutwitter/shared/theme.dart';
 import 'package:flutwitter/widgets/svg_icon.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -11,6 +10,9 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -29,8 +31,8 @@ class WelcomeScreen extends StatelessWidget {
               children: [
                 const Spacer(flex: 6),
                 Text(
-                  "See what's happening in the world right now.",
-                  style: Theme.of(context).textTheme.headline4,
+                  l10n.welcomeScreenMessage,
+                  style: theme.textTheme.headline4,
                 ),
                 const Spacer(flex: 10),
                 Column(
@@ -43,41 +45,41 @@ class WelcomeScreen extends StatelessWidget {
                           CreateAccountScreen.routeName,
                         );
                       },
-                      child: const Text('Create an account'),
+                      child: Text(l10n.welcomeScreenButtonText),
                     )
                   ],
                 ),
                 const Spacer(flex: 2),
                 RichText(
                   text: TextSpan(
-                    style: Theme.of(context).textTheme.caption,
-                    children: const [
-                      TextSpan(text: 'By signing up, you agree to our '),
+                    style: theme.textTheme.caption,
+                    children: [
+                      TextSpan(text: l10n.welcomeScreenAgreementText1),
                       TextSpan(
-                        text: 'Terms',
-                        style: TextStyle(color: primaryColor),
+                        text: l10n.welcomeScreenAgreementTextTerms,
+                        style: TextStyle(color: theme.colorScheme.primary),
                       ),
-                      TextSpan(text: ', '),
+                      TextSpan(text: l10n.welcomeScreenAgreementText2),
                       TextSpan(
-                        text: 'Privacy Policy',
-                        style: TextStyle(color: primaryColor),
+                        text: l10n.welcomeScreenAgreementTextPrivacyPolicy,
+                        style: TextStyle(color: theme.colorScheme.primary),
                       ),
-                      TextSpan(text: ' and '),
+                      TextSpan(text: l10n.welcomeScreenAgreementText3),
                       TextSpan(
-                        text: 'Cookie Use',
-                        style: TextStyle(color: primaryColor),
+                        text: l10n.welcomeScreenAgreementTextCookieUse,
+                        style: TextStyle(color: theme.colorScheme.primary),
                       ),
-                      TextSpan(text: '.'),
+                      const TextSpan(text: '.'),
                     ],
                   ),
                 ),
                 const Spacer(),
                 Row(
                   children: [
-                    const Text('Have an account already ?'),
+                    Text(l10n.welcomeScreenQuestion),
                     TextButton(
                       onPressed: () {},
-                      child: const Text('Log in'),
+                      child: Text(l10n.welcomeScreenAnswer),
                     )
                   ],
                 )

@@ -1,5 +1,6 @@
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutwitter/l10n/l10n.dart';
 import 'package:flutwitter/shared/constants.dart';
 import 'package:flutwitter/shared/registration.dart';
 import 'package:flutwitter/widgets/svg_icon.dart';
@@ -14,6 +15,8 @@ class VerifyCodeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     final registration = ref.read(registrationProvider);
 
     return Scaffold(
@@ -29,11 +32,11 @@ class VerifyCodeScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               Text(
-                "We sent you a code",
-                style: Theme.of(context).textTheme.headline4,
+                l10n.verifyCodeScreenTitle,
+                style: theme.textTheme.headline4,
               ),
               const SizedBox(height: kDefaultSpacing),
-              Text("Enter it below to verify ${registration.email}."),
+              Text(l10n.verifyCodeScreenMessage(registration.email)),
               const SizedBox(height: kDefaultSpacing),
               const CodeField(),
               const SizedBox(height: kDefaultSpacing),
@@ -50,10 +53,10 @@ class VerifyCodeScreen extends ConsumerWidget {
                             Padding(
                               padding: const EdgeInsets.all(kDefaultPadding),
                               child: Text(
-                                "Didn't receive email?",
-                                style: Theme.of(context).textTheme.headline6?.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                                l10n.verifyCodeScreenReceivedQuestion,
+                                style: theme.textTheme.headline6?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
                             ListTile(
@@ -63,21 +66,21 @@ class VerifyCodeScreen extends ConsumerWidget {
                                   context: context,
                                   onSuccess: () {
                                     context.showToast(
-                                      'We sent you a new verification code.',
+                                      l10n.verifyCodeScreenToastCodeSent,
                                       backgroundColor: Colors.white,
                                       textStyle: const TextStyle(color: Colors.black),
                                     );
                                   },
                                 );
                               },
-                              title: const Text('Resend email'),
+                              title: Text(l10n.verifyCodeScreenResend),
                             ),
                           ],
                         ),
                       ),
                     );
                   },
-                  child: const Text("Didn't receive email?"),
+                  child: Text(l10n.verifyCodeScreenReceivedQuestion),
                 ),
               )
             ],
@@ -106,9 +109,11 @@ class VerifyCodeScreen extends ConsumerWidget {
                             );
                           }
                         : null,
-                    child: const Text('Next'),
+                    child: Text(l10n.next),
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.zero,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: kDefaultPadding,
+                      ),
                       primary: Colors.white,
                       onPrimary: Colors.black,
                     ),
@@ -130,8 +135,8 @@ class CodeField extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return TextField(
       keyboardType: TextInputType.number,
-      decoration: const InputDecoration(
-        hintText: 'Verification code',
+      decoration: InputDecoration(
+        hintText: AppLocalizations.of(context)!.verifyCodeScreenFieldPlaceholder,
       ),
       onChanged: (newValue) {
         ref.read(verificationCodeProvider.notifier).state = newValue;

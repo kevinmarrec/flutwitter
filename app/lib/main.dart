@@ -1,6 +1,6 @@
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutwitter/l10n/l10n.dart';
 import 'package:flutwitter/router/router.dart';
 import 'package:flutwitter/shared/theme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -19,12 +19,10 @@ class MyApp extends StatelessWidget {
       theme: getTheme(),
       initialRoute: AppRouter.initialRoute,
       onGenerateRoute: AppRouter.onGenerateRoute,
-      builder: (context, child) {
-        return Toast(
-          child: child!,
-          navigatorKey: child.key as GlobalKey<NavigatorState>,
-        );
-      },
+      builder: (context, child) => Toast(
+        child: child!,
+        navigatorKey: child.key as GlobalKey<NavigatorState>,
+      ),
     );
   }
 }

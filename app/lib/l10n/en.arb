@@ -1,4 +1,36 @@
 {
   "@@locale": "en",
-  "someText": "test"
+  "next": "Next",
+  "welcomeScreenMessage": "See what's happening in the world right now",
+  "welcomeScreenButtonText": "Create an account",
+  "welcomeScreenAgreementText1": "By signing up, you agree to our ",
+  "welcomeScreenAgreementTextTerms": "Terms",
+  "welcomeScreenAgreementText2": ", ",
+  "welcomeScreenAgreementTextPrivacyPolicy": "Privacy Policy",
+  "welcomeScreenAgreementText3": " and ",
+  "welcomeScreenAgreementTextCookieUse": "Cookie Use",
+  "welcomeScreenQuestion": "Have an account already ?",
+  "welcomeScreenAnswer": "Log in",
+  "createAccountScreenTitle": "Create your account",
+  "createAccountScreenNameFieldPlaceholder": "Name",
+  "createAccountScreenEmailFieldPlaceholder": "Email",
+  "createAccountScreenEmailErrorInvalid": "Please enter a valid email.",
+  "createAccountScreenEmailErrorTaken": "This email is already in use.",
+  "createAccountScreenBirthDateFieldPlaceholder": "Date of birth",
+  "verifyCodeScreenTitle": "We sent you a code",
+  "verifyCodeScreenMessage": "Enter it below to verify {email}.",
+  "@verifyCodeScreenMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "verifyCodeScreenFieldPlaceholder": "Verification code",
+  "verifyCodeScreenReceivedQuestion": "Didn't receive email ?",
+  "verifyCodeScreenResend": "Resend email",
+  "verifyCodeScreenToastCodeSent": "We sent you a new verification code.",
+  "registrationToastIncorrectCode": "The code you entered is incorrect.\nPlease try again.",
+  "registrationToastTooManyAttempts": "You've exceeded the number of attempts.\nPlease try again later.",
+  "registrationToastError": "Can't complete your signup right now."
 }
