@@ -195,17 +195,16 @@ class DateField extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final birthDate = ref.watch(registrationProvider.select((r) => r.birthDate));
 
-    final controller = useTextEditingController()
-      ..text =
-          birthDate != null ? DateFormat('d MMMM y', Localizations.localeOf(context).toString()).format(birthDate) : '';
+    final controller = useTextEditingController()..text = birthDate != null ? l10n.formatDate(birthDate) : '';
 
     return TextField(
       controller: controller,
       readOnly: true,
       decoration: InputDecoration(
-        hintText: AppLocalizations.of(context)!.createAccountScreenBirthDateFieldPlaceholder,
+        hintText: l10n.createAccountScreenBirthDateFieldPlaceholder,
         suffixIcon: birthDate != null ? SvgIcon.checkboxMarkedCircleOutline() : null,
         suffixIconConstraints: const BoxConstraints(
           minWidth: 0,
