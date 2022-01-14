@@ -1,5 +1,5 @@
 import fp from 'fastify-plugin'
-import { createTransport, Transporter } from 'nodemailer'
+import { Transporter, createTransport } from 'nodemailer'
 
 declare module 'fastify' {
   export interface FastifyInstance {

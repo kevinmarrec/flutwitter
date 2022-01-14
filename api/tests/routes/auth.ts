@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { createUser } from '../helpers/users'
 
 describe('POST /auth/login', () => {

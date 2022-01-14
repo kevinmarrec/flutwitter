@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import { FastifyInstance } from 'fastify'
+
 import { createServer } from './server'
 
 let server: FastifyInstance

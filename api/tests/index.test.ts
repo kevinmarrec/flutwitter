@@ -1,13 +1,15 @@
 
 import dotenv from 'dotenv'
+import { afterAll, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest'
+
 import { createServer } from '../src/server'
-import { setupDatabase, cleanDatabase, destroyDatabase } from './helpers/database'
+import { cleanDatabase, destroyDatabase, setupDatabase } from './helpers/database'
 
 dotenv.config({ path: '.env.test' })
 
-jest.mock('nodemailer', () => ({
-  createTransport: jest.fn().mockReturnValue({
-    sendMail: jest.fn()
+vi.mock('nodemailer', () => ({
+  createTransport: vi.fn().mockReturnValue({
+    sendMail: vi.fn()
   })
 }))
 
@@ -34,13 +36,13 @@ test('server is healthy', async () => {
   expect(response.statusCode).toBe(200)
 })
 
-describe ('routes', () => {
+describe ('routes', async () => {
   test('/', async () => {
     const response = await server.inject('/')
     expect(response.body).toBe('FlutTwitter API')
   })
 
-  require('./routes/auth')
-  require('./routes/emailVerifications')
-  require('./routes/users')
+  await import('./routes/auth')
+  await import('./routes/emailVerifications')
+  await import('./routes/users')
 })

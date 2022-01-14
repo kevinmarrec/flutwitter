@@ -22,6 +22,9 @@ module.exports = {
       args: 'all',
       argsIgnorePattern: '^_',
       varsIgnorePattern: '^_'
+    }],
+    'sort-imports': ['error', {
+      ignoreDeclarationSort: true
     }]
   }
 }

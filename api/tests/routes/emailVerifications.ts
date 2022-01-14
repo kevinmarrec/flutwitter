@@ -1,5 +1,6 @@
 import type { EmailVerification } from '@prisma/client'
 import faker from 'faker'
+import { beforeEach, describe, expect, test } from 'vitest'
 
 import { createEmailVerification } from '../helpers/emailVerifications'
 import { createUser } from '../helpers/users'

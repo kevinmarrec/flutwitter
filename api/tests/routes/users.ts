@@ -1,5 +1,6 @@
 import faker from 'faker'
 import { createSigner } from 'fast-jwt'
+import { beforeEach, describe, expect, test } from 'vitest'
 
 import { createEmailVerification } from '../helpers/emailVerifications'
 import { createUser, makeUser } from '../helpers/users'

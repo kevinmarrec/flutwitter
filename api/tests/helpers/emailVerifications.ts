@@ -1,4 +1,4 @@
-import type { Prisma, EmailVerification } from '@prisma/client'
+import type { EmailVerification, Prisma } from '@prisma/client'
 import faker from 'faker'
 
 export async function createEmailVerification (input?: Partial<Prisma.EmailVerificationCreateInput>): Promise<EmailVerification> {
