@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+Route slide(Widget child) {
+  return PageSlideTransition(child: child);
+}
+
 class PageSlideTransition extends PageRouteBuilder {
   final Widget child;
 

@@ -3,6 +3,8 @@ import 'package:riverpod/riverpod.dart';
 
 export 'package:dio/dio.dart' show DioError;
 
+typedef DioOptions = Options;
+
 final dioProvider = Provider((ref) {
   final dio = Dio(
     BaseOptions(
@@ -13,11 +15,7 @@ final dioProvider = Provider((ref) {
   dio.interceptors.add(
     InterceptorsWrapper(
       onError: (DioError e, handler) {
-        if (e.type == DioErrorType.other) {
-          // TODO
-          return;
-        }
-
+        // TODO: Handle DioErrorType.other errors
         return handler.next(e);
       },
     ),

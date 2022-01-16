@@ -1,7 +1,7 @@
 {
   "@@locale": "en",
   "next": "Next",
-  "welcomeScreenMessage": "See what's happening in the world right now",
+  "welcomeScreenMessage": "See what's happening in the world right now.",
   "welcomeScreenButtonText": "Create an account",
   "welcomeScreenAgreementText1": "By signing up, you agree to our ",
   "welcomeScreenAgreementTextTerms": "Terms",
@@ -14,9 +14,11 @@
   "registrationDetailsScreenTitle": "Create your account",
   "registrationDetailsScreenNameFieldPlaceholder": "Name",
   "registrationDetailsScreenEmailFieldPlaceholder": "Email",
-  "registrationDetailsScreenEmailErrorInvalid": "Please enter a valid email.",
-  "registrationDetailsScreenEmailErrorTaken": "This email is already in use.",
+  "registrationDetailsScreenEmailFieldErrorInvalid": "Please enter a valid email.",
+  "registrationDetailsScreenEmailFieldErrorTaken": "This email is already in use.",
   "registrationDetailsScreenBirthDateFieldPlaceholder": "Date of birth",
+  "registrationDetailsScreenBirthDateFieldMessage": "This will not be shown publicly.",
+  "registrationDetailsScreenButtonText": "Sign up",
   "registrationVerificationScreenTitle": "We sent you a code",
   "registrationVerificationScreenMessage": "Enter it below to verify {email}.",
   "@registrationVerificationScreenMessage": {
@@ -30,6 +32,10 @@
   "registrationVerificationScreenReceivedQuestion": "Didn't receive email ?",
   "registrationVerificationScreenResend": "Resend email",
   "registrationVerificationScreenToastCodeSent": "We sent you a new verification code.",
+  "registrationPasswordScreenTitle": "You'll need a password",
+  "registrationPasswordScreenMessage": "Make sure it's 8 characters or more.",
+  "registrationPasswordScreenFieldPlaceholder": "Password",
+  "registrationPasswordScreenFieldErrorLength": "Your password needs to be at least 8 characters.\nPlease enter a longer one.",
   "registrationToastIncorrectCode": "The code you entered is incorrect.\nPlease try again.",
   "registrationToastTooManyAttempts": "You've exceeded the number of attempts.\nPlease try again later.",
   "registrationToastError": "Can't complete your signup right now."

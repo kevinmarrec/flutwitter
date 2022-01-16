@@ -1,0 +1,129 @@
+import 'package:easy_debounce/easy_debounce.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutwitter/l10n/l10n.dart';
+import 'package:flutwitter/shared/constants.dart';
+import 'package:flutwitter/shared/registration.dart';
+import 'package:flutwitter/widgets/svg_icon.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final passwordProvider = StateProvider.autoDispose((_) => '');
+
+class RegistrationPasswordScreen extends ConsumerWidget {
+  static const routeName = '/registration/password';
+
+  const RegistrationPasswordScreen({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: SvgIcon.twitter(),
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(kDefaultPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                l10n.registrationPasswordScreenTitle,
+                style: theme.textTheme.headline4,
+              ),
+              const SizedBox(height: kDefaultSpacing),
+              Text(l10n.registrationPasswordScreenMessage),
+              const SizedBox(height: kDefaultSpacing),
+              const PasswordField(),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(kDefaultPadding * 1.5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Consumer(
+                builder: (context, ref, _) {
+                  final password = ref.watch(passwordProvider);
+
+                  return ElevatedButton(
+                    onPressed: password.isNotEmpty
+                        ? () => ref.read(registrationProvider).complete(password, context: context)
+                        : null,
+                    child: Text(l10n.next),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: kDefaultPadding,
+                      ),
+                      primary: Colors.white,
+                      onPrimary: Colors.black,
+                    ),
+                  );
+                },
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PasswordField extends HookConsumerWidget {
+  const PasswordField({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final errorText = useState<String?>(null);
+    final valid = useState(false);
+    final visible = useState(false);
+
+    return TextField(
+      obscureText: !visible.value,
+      decoration: InputDecoration(
+        hintText: AppLocalizations.of(context)!.registrationPasswordScreenFieldPlaceholder,
+        errorText: errorText.value,
+        suffixIcon: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              onPressed: () {
+                visible.value = !visible.value;
+              },
+              icon: Icon(visible.value ? Icons.visibility : Icons.visibility_off),
+            ),
+            if (valid.value) SvgIcon.checkboxMarkedCircleOutline(),
+          ],
+        ),
+        suffixIconConstraints: const BoxConstraints(
+          minWidth: 0,
+          minHeight: 0,
+        ),
+      ),
+      onChanged: (newValue) {
+        final notifier = ref.read(passwordProvider.notifier);
+
+        notifier.state = '';
+        errorText.value = null;
+        valid.value = false;
+
+        EasyDebounce.debounce('passwordValidation', kDefaultTypingDebounceDuration, () {
+          if (newValue.length >= 8) {
+            valid.value = true;
+            notifier.state = newValue;
+          } else {
+            errorText.value = l10n.registrationPasswordScreenFieldErrorLength;
+          }
+        });
+      },
+    );
+  }
+}

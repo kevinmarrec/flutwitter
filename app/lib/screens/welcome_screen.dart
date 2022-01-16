@@ -25,7 +25,7 @@ class WelcomeScreen extends StatelessWidget {
             width: constraints.maxWidth,
             padding: EdgeInsets.symmetric(
               vertical: constraints.maxHeight * 0.05,
-              horizontal: constraints.maxWidth * 0.125,
+              horizontal: constraints.maxWidth * 0.1,
             ),
             child: Column(
               children: [

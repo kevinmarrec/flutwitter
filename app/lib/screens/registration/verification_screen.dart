@@ -1,6 +1,7 @@
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutwitter/l10n/l10n.dart';
+import 'package:flutwitter/screens/registration/password_screen.dart';
 import 'package:flutwitter/shared/constants.dart';
 import 'package:flutwitter/shared/registration.dart';
 import 'package:flutwitter/widgets/svg_icon.dart';
@@ -89,7 +90,7 @@ class RegistrationVerificationScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: BottomAppBar(
         child: Padding(
-          padding: const EdgeInsets.all(kDefaultPadding),
+          padding: const EdgeInsets.all(kDefaultPadding * 1.5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -104,7 +105,7 @@ class RegistrationVerificationScreen extends ConsumerWidget {
                               code,
                               context: context,
                               onSuccess: () {
-                                print(registration.verificationToken);
+                                Navigator.pushNamed(context, RegistrationPasswordScreen.routeName);
                               },
                             );
                           }

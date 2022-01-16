@@ -7,9 +7,9 @@ import 'package:riverpod/riverpod.dart';
 class Registration {
   Registration(
     this._read, {
-    required this.name,
-    required this.email,
-    required this.birthDate,
+    this.name = '',
+    this.email = '',
+    this.birthDate,
   });
 
   final Reader _read;
@@ -18,7 +18,7 @@ class Registration {
   final String email;
   final DateTime? birthDate;
 
-  String? verificationToken;
+  String? authorizationToken;
 
   bool get isNameValid => name.isNotEmpty;
   bool get isEmailValid => email.isNotEmpty;
@@ -50,11 +50,7 @@ class Registration {
     } catch (e) {
       final l10n = AppLocalizations.of(context)!;
       final tooManyRequests = e is DioError && e.response!.statusCode == 429;
-      context.showToast(
-        tooManyRequests ? l10n.registrationToastTooManyAttempts : l10n.registrationToastError,
-        backgroundColor: Colors.white,
-        textStyle: const TextStyle(color: Colors.black),
-      );
+      _showToast(context, tooManyRequests ? l10n.registrationToastTooManyAttempts : l10n.registrationToastError);
     }
   }
 
@@ -68,19 +64,41 @@ class Registration {
         },
       );
 
-      verificationToken = response.data['token'];
+      authorizationToken = response.data['token'];
 
       onSuccess?.call();
     } catch (e) {
-      context.showToast(
-        AppLocalizations.of(context)!.registrationToastIncorrectCode,
-        backgroundColor: Colors.white,
-        textStyle: const TextStyle(color: Colors.black),
-      );
+      _showToast(context, AppLocalizations.of(context)!.registrationToastIncorrectCode);
     }
+  }
+
+  void complete(String password, {required BuildContext context, Function? onSuccess}) async {
+    try {
+      final response = await _read(dioProvider).post(
+        '/users',
+        options: DioOptions(headers: {'authorization': authorizationToken}),
+        data: {
+          'email': email,
+          'password': password,
+          'name': name,
+          'birthDate': birthDate?.toUtc().toString(),
+        },
+      );
+
+      _showToast(context, 'Success');
+      // onSuccess?.call();
+    } catch (e) {
+      _showToast(context, AppLocalizations.of(context)!.registrationToastError);
+    }
+  }
+
+  void _showToast(BuildContext context, String message) {
+    context.showToast(
+      message,
+      backgroundColor: Colors.white,
+      textStyle: const TextStyle(color: Colors.black),
+    );
   }
 }
 
-final registrationProvider = StateProvider.autoDispose(
-  (ref) => Registration(ref.read, name: '', email: '', birthDate: null),
-);
+final registrationProvider = StateProvider.autoDispose((ref) => Registration(ref.read));
