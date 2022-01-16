@@ -6,8 +6,7 @@
     "esModuleInterop": true,
     "strict": true,
     "types": [
-      "node",
-      "faker"
+      "node"
     ]
   }
 }

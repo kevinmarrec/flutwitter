@@ -1,11 +1,11 @@
-import execa from 'execa'
+import { execaCommand } from 'execa'
 import knex, { Knex } from 'knex'
 import knexCleaner from 'knex-cleaner'
 
 let client: Knex
 
 export async function setupDatabase (): Promise<void> {
-  await execa.command('./node_modules/.bin/prisma migrate reset -f --skip-generate --skip-seed')
+  await execaCommand('./node_modules/.bin/prisma migrate reset -f --skip-generate --skip-seed')
   client = knex(process.env.DATABASE_URL || '')
 }
 
