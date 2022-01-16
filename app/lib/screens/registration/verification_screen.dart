@@ -8,10 +8,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final verificationCodeProvider = StateProvider.autoDispose((_) => '');
 
-class VerifyCodeScreen extends ConsumerWidget {
-  static const routeName = '/registration/verify_code';
+class RegistrationVerificationScreen extends ConsumerWidget {
+  static const routeName = '/registration/verification';
 
-  const VerifyCodeScreen({Key? key}) : super(key: key);
+  const RegistrationVerificationScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,11 +32,11 @@ class VerifyCodeScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               Text(
-                l10n.verifyCodeScreenTitle,
+                l10n.registrationVerificationScreenTitle,
                 style: theme.textTheme.headline4,
               ),
               const SizedBox(height: kDefaultSpacing),
-              Text(l10n.verifyCodeScreenMessage(registration.email)),
+              Text(l10n.registrationVerificationScreenMessage(registration.email)),
               const SizedBox(height: kDefaultSpacing),
               const CodeField(),
               const SizedBox(height: kDefaultSpacing),
@@ -53,7 +53,7 @@ class VerifyCodeScreen extends ConsumerWidget {
                             Padding(
                               padding: const EdgeInsets.all(kDefaultPadding),
                               child: Text(
-                                l10n.verifyCodeScreenReceivedQuestion,
+                                l10n.registrationVerificationScreenReceivedQuestion,
                                 style: theme.textTheme.headline6?.copyWith(
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -66,21 +66,21 @@ class VerifyCodeScreen extends ConsumerWidget {
                                   context: context,
                                   onSuccess: () {
                                     context.showToast(
-                                      l10n.verifyCodeScreenToastCodeSent,
+                                      l10n.registrationVerificationScreenToastCodeSent,
                                       backgroundColor: Colors.white,
                                       textStyle: const TextStyle(color: Colors.black),
                                     );
                                   },
                                 );
                               },
-                              title: Text(l10n.verifyCodeScreenResend),
+                              title: Text(l10n.registrationVerificationScreenResend),
                             ),
                           ],
                         ),
                       ),
                     );
                   },
-                  child: Text(l10n.verifyCodeScreenReceivedQuestion),
+                  child: Text(l10n.registrationVerificationScreenReceivedQuestion),
                 ),
               )
             ],
@@ -136,7 +136,7 @@ class CodeField extends ConsumerWidget {
     return TextField(
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        hintText: AppLocalizations.of(context)!.verifyCodeScreenFieldPlaceholder,
+        hintText: AppLocalizations.of(context)!.registrationVerificationScreenFieldPlaceholder,
       ),
       onChanged: (newValue) {
         ref.read(verificationCodeProvider.notifier).state = newValue;

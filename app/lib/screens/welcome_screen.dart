@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutwitter/l10n/l10n.dart';
-import 'package:flutwitter/screens/registration/create_account_screen.dart';
+import 'package:flutwitter/screens/registration/details_screen.dart';
 import 'package:flutwitter/widgets/svg_icon.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -42,7 +42,7 @@ class WelcomeScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.pushNamed(
                           context,
-                          CreateAccountScreen.routeName,
+                          RegistrationDetailsScreen.routeName,
                         );
                       },
                       child: Text(l10n.welcomeScreenButtonText),

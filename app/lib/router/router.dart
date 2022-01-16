@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutwitter/router/transitions/page_slide_transition.dart';
-import 'package:flutwitter/screens/registration/create_account_screen.dart';
-import 'package:flutwitter/screens/registration/verify_code_screen.dart';
+import 'package:flutwitter/screens/registration/details_screen.dart';
+import 'package:flutwitter/screens/registration/verification_screen.dart';
 import 'package:flutwitter/screens/welcome_screen.dart';
 
 class AppRouter {
@@ -13,13 +13,13 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const WelcomeScreen(),
         );
-      case CreateAccountScreen.routeName:
+      case RegistrationDetailsScreen.routeName:
         return PageSlideTransition(
-          child: const CreateAccountScreen(),
+          child: const RegistrationDetailsScreen(),
         );
-      case VerifyCodeScreen.routeName:
+      case RegistrationVerificationScreen.routeName:
         return PageSlideTransition(
-          child: const VerifyCodeScreen(),
+          child: const RegistrationVerificationScreen(),
         );
       default:
         throw 'Route not implemented';
