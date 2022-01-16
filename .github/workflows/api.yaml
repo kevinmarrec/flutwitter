@@ -72,4 +72,4 @@ jobs:
       - name: Run tests
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test
-        run: pnpm test
+        run: pnpm test:coverage

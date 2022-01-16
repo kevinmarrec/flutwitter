@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs'
 import fp from 'fastify-plugin'
 import { Static, Type } from '@sinclair/typebox'
 import { createVerifier } from 'fast-jwt'
@@ -45,7 +46,7 @@ export default fp(async fastify => {
       const { password: _, ...user } = await fastify.prisma.user.create({
         data: {
           email,
-          password,
+          password: bcrypt.hashSync(password, 10),
           name,
           birthDate: new Date(birthDate),
           username: generateUniqueUsername(name)

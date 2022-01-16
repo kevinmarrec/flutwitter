@@ -6,7 +6,6 @@
       "type": "node",
       "request": "launch",
       "preLaunchTask": "docker: start db",
-      "postDebugTask": "docker: stop db",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["dev"],
       "internalConsoleOptions": "openOnSessionStart",
