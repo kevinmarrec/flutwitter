@@ -27,8 +27,8 @@ ThemeData getTheme() {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(
-          horizontal: 8,
           vertical: 16,
+          horizontal: 8,
         ),
         shape: const StadiumBorder(),
         textStyle: const TextStyle(

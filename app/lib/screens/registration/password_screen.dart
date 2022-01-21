@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutwitter/l10n/l10n.dart';
 import 'package:flutwitter/shared/constants.dart';
 import 'package:flutwitter/shared/registration.dart';
+import 'package:flutwitter/widgets/screen.dart';
 import 'package:flutwitter/widgets/svg_icon.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -18,57 +19,32 @@ class RegistrationPasswordScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: SvgIcon.twitter(),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(kDefaultPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Text(
-                l10n.registrationPasswordScreenTitle,
-                style: theme.textTheme.headline4,
-              ),
-              const SizedBox(height: kDefaultSpacing),
-              Text(l10n.registrationPasswordScreenMessage),
-              const SizedBox(height: kDefaultSpacing),
-              const PasswordField(),
-            ],
+    return Screen(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.registrationPasswordScreenTitle,
+            style: theme.textTheme.headline4,
           ),
-        ),
+          const SizedBox(height: kDefaultSpacing),
+          Text(l10n.registrationPasswordScreenMessage),
+          const SizedBox(height: kDefaultSpacing),
+          const PasswordField(),
+        ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: const EdgeInsets.all(kDefaultPadding * 1.5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Consumer(
-                builder: (context, ref, _) {
-                  final password = ref.watch(passwordProvider);
+      bottom: ScreenBottomAppBar(
+        rightChild: Consumer(
+          builder: (context, ref, _) {
+            final password = ref.watch(passwordProvider);
 
-                  return ElevatedButton(
-                    onPressed: password.isNotEmpty
-                        ? () => ref.read(registrationProvider).complete(password, context: context)
-                        : null,
-                    child: Text(l10n.next),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: kDefaultPadding,
-                      ),
-                      primary: Colors.white,
-                      onPrimary: Colors.black,
-                    ),
-                  );
-                },
-              )
-            ],
-          ),
+            return ScreenBottomAppBarRightButton(
+              text: l10n.next,
+              onPressed: password.isNotEmpty
+                  ? () => ref.read(registrationProvider).complete(password, context: context)
+                  : null,
+            );
+          },
         ),
       ),
     );

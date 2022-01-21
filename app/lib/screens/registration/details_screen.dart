@@ -7,6 +7,7 @@ import 'package:flutwitter/screens/registration/verification_screen.dart';
 import 'package:flutwitter/shared/constants.dart';
 import 'package:flutwitter/shared/dio.dart';
 import 'package:flutwitter/shared/registration.dart';
+import 'package:flutwitter/widgets/screen.dart';
 import 'package:flutwitter/widgets/svg_icon.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -19,58 +20,43 @@ class RegistrationDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: SvgIcon.twitter(),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (_, constraints) => Container(
-            height: constraints.maxHeight,
-            width: constraints.maxWidth,
-            padding: EdgeInsets.symmetric(
-              vertical: constraints.maxHeight * 0.05,
-              horizontal: constraints.maxWidth * 0.1,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Center(
-                  child: Text(
-                    l10n.registrationDetailsScreenTitle,
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                ),
-                const Spacer(),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  child: const CreateAccountForm(),
-                ),
-                const Spacer(flex: 2),
-                Consumer(
-                  builder: (context, ref, _) {
-                    final registration = ref.watch(registrationProvider);
-
-                    return ElevatedButton(
-                      onPressed: registration.isValid
-                          ? () {
-                              registration.sendVerificationEmail(
-                                context: context,
-                                onSuccess: () {
-                                  Navigator.pushNamed(context, RegistrationVerificationScreen.routeName);
-                                },
-                              );
-                            }
-                          : null,
-                      child: Text(l10n.registrationDetailsScreenButtonText),
-                    );
-                  },
-                ),
-              ],
+    return Screen(
+      padding: const EdgeInsets.all(kDefaultPadding * 1.5),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Text(
+              l10n.registrationDetailsScreenTitle,
+              style: Theme.of(context).textTheme.headline4,
             ),
           ),
-        ),
+          const Spacer(flex: 1),
+          const Expanded(
+            flex: 12,
+            child: CreateAccountForm(),
+          ),
+          const Spacer(flex: 2),
+          Consumer(
+            builder: (context, ref, _) {
+              final registration = ref.watch(registrationProvider);
+
+              return ElevatedButton(
+                onPressed: registration.isValid
+                    ? () {
+                        registration.sendVerificationEmail(
+                          context: context,
+                          onSuccess: () {
+                            Navigator.pushNamed(context, RegistrationVerificationScreen.routeName);
+                          },
+                        );
+                      }
+                    : null,
+                child: Text(l10n.registrationDetailsScreenButtonText),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -83,11 +69,13 @@ class CreateAccountForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: const [
+        Spacer(flex: 2),
         NameField(),
         Spacer(flex: 2),
         EmailField(),
         Spacer(flex: 4),
         DateField(),
+        Spacer(flex: 2),
       ],
     );
   }
