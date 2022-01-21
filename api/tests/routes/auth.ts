@@ -1,16 +1,23 @@
+import bcrypt from 'bcryptjs'
+import faker from 'faker'
 import { describe, expect, test } from 'vitest'
+
 import { createUser } from '../helpers/users'
 
 describe('POST /auth/login', () => {
   test('returns authenticated user with token', async () => {
-    const user = await createUser()
+    const password = faker.internet.password(8)
+
+    const user = await createUser({
+      passwordHash: bcrypt.hashSync(password, 10)
+    })
 
     const response = await server.inject({
       method: 'POST',
       url: '/auth/login',
       payload: {
         email: user.email,
-        password: user.password
+        password
       }
     })
 
@@ -20,8 +27,8 @@ describe('POST /auth/login', () => {
 
     expect(body.token).toBeTruthy()
     expect(body.user).toEqual(expect.objectContaining({
-      id: user.id,
-      email: user.email
+      name: user.name,
+      username: user.username
     }))
   })
 
@@ -30,7 +37,7 @@ describe('POST /auth/login', () => {
       method: 'POST',
       url: '/auth/login',
       payload: {
-        email: 'x@y.z',
+        email: 'foo@bar.baz',
         password: 'foobar42'
       }
     })

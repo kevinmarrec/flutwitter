@@ -5,7 +5,7 @@ import { createServer } from './server'
 
 let server: FastifyInstance
 
-dotenv.config({ path: `.env.${process.env.NODE_ENV === 'production' ? 'production' : 'development' }` })
+dotenv.config()
 
 async function start () {
   server = await createServer()

@@ -4,6 +4,8 @@ import { Static, Type } from '@sinclair/typebox'
 import { createVerifier } from 'fast-jwt'
 import removeAccents from 'remove-accents'
 
+import { pick } from '../utils/object'
+
 function generateUniqueUsername (name: string) {
   return removeAccents(name).split(' ').join('')
 }
@@ -43,10 +45,10 @@ export default fp(async fastify => {
         return reply.conflict('Email "${email}" is already associated to an existing user')
       }
 
-      const { password: _, ...user } = await fastify.prisma.user.create({
+      const user = await fastify.prisma.user.create({
         data: {
           email,
-          password: bcrypt.hashSync(password, 10),
+          passwordHash: bcrypt.hashSync(password, 10),
           name,
           birthDate: new Date(birthDate),
           username: generateUniqueUsername(name)
@@ -59,7 +61,7 @@ export default fp(async fastify => {
 
       return {
         token: fastify.jwt.sign({ id: user.id }),
-        user
+        user: pick(user, ['name', 'username'])
       }
     })
 

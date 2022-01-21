@@ -3,7 +3,7 @@ import { createSigner } from 'fast-jwt'
 import { beforeEach, describe, expect, test } from 'vitest'
 
 import { createEmailVerification } from '../helpers/emailVerifications'
-import { createUser, makeUser } from '../helpers/users'
+import { createUser, makeUserPayload } from '../helpers/users'
 
 describe('POST /users', () => {
   const email: string = faker.internet.email()
@@ -21,16 +21,21 @@ describe('POST /users', () => {
       headers: {
         authorization: authorizationToken
       },
-      payload: makeUser({ email })
+      payload: makeUserPayload({ email })
     })
 
-    expect(await server.prisma.user.findUnique({ where: { email} })).toBeTruthy()
+    const user = await server.prisma.user.findUnique({ where: { email} })
+
+    expect(user).toBeTruthy()
 
     expect(response.statusCode).toBe(200)
-    expect(response.json()).toEqual(expect.objectContaining({
-      user: expect.objectContaining({
-        email
-      })
+
+    const body = response.json()
+
+    expect(body.token).toBeTruthy()
+    expect(body.user).toEqual(expect.objectContaining({
+      name: user?.name,
+      username: user?.username
     }))
   })
 
@@ -41,7 +46,7 @@ describe('POST /users', () => {
       headers: {
         authorization: 'foo'
       },
-      payload: makeUser({ email: 'foo@bar.baz' })
+      payload: makeUserPayload({ email: 'foo@bar.baz' })
     })
 
     expect(response.statusCode).toBe(401)
@@ -54,7 +59,7 @@ describe('POST /users', () => {
       headers: {
         authorization: authorizationToken
       },
-      payload: makeUser({ email: 'foo@bar.baz' })
+      payload: makeUserPayload({ email: 'foo@bar.baz' })
     })
 
     expect(response.statusCode).toBe(403)
@@ -69,7 +74,7 @@ describe('POST /users', () => {
       headers: {
         authorization: authorizationToken
       },
-      payload: makeUser({ email })
+      payload: makeUserPayload({ email })
     })
 
     expect(response.statusCode).toBe(409)

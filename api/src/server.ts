@@ -18,9 +18,7 @@ export async function createServer (): Promise<FastifyInstance> {
   await server.register(autoload, { dir: path.join(__dirname, 'plugins') })
   await server.register(autoload, { dir: path.join(__dirname, 'routes') })
 
-  server.get('/', async () => {
-    return 'FlutTwitter API'
-  })
+  server.get('/', async () => 'FlutTwitter API')
 
   // Health Check route
   server.get('/_health', async () => true)
