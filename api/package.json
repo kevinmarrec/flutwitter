@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@prisma/client": "^3.8.1",
-    "@sinclair/typebox": "^0.23.2",
+    "@sinclair/typebox": "^0.23.3",
     "bcryptjs": "^2.4.3",
     "dotenv": "^14.2.0",
     "fast-jwt": "^1.4.1",
@@ -50,6 +50,6 @@
     "pino-pretty": "^7.5.0",
     "prisma": "^3.8.1",
     "typescript": "^4.5.5",
-    "vitest": "^0.1.20"
+    "vitest": "^0.2.0"
   }
 }
