@@ -46,9 +46,7 @@ class RegistrationDetailsScreen extends StatelessWidget {
                     ? () {
                         registration.sendVerificationEmail(
                           context: context,
-                          onSuccess: () {
-                            Navigator.pushNamed(context, RegistrationVerificationScreen.routeName);
-                          },
+                          onSuccess: () => Navigator.of(context).pushNamed(RegistrationVerificationScreen.routeName),
                         );
                       }
                     : null,

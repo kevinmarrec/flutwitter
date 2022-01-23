@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutwitter/router/transitions/page_slide_transition.dart';
+import 'package:flutwitter/screens/login/login_search_screen.dart';
 import 'package:flutwitter/screens/registration/details_screen.dart';
 import 'package:flutwitter/screens/registration/password_screen.dart';
 import 'package:flutwitter/screens/registration/verification_screen.dart';
@@ -22,6 +23,8 @@ class AppRouter {
         return slide(const RegistrationVerificationScreen());
       case RegistrationPasswordScreen.routeName:
         return slide(const RegistrationPasswordScreen());
+      case LoginSearchScreen.routeName:
+        return slide(const LoginSearchScreen());
       default:
         throw 'Route not implemented';
     }

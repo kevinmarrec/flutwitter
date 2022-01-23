@@ -90,9 +90,7 @@ class RegistrationVerificationScreen extends ConsumerWidget {
                       registration.verifyCode(
                         code,
                         context: context,
-                        onSuccess: () {
-                          Navigator.pushNamed(context, RegistrationPasswordScreen.routeName);
-                        },
+                        onSuccess: () => Navigator.of(context).pushNamed(RegistrationPasswordScreen.routeName),
                       );
                     }
                   : null,
