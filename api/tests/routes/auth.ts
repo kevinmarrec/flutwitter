@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs'
-import faker from 'faker'
+import { faker } from 'faker'
 import { describe, expect, test } from 'vitest'
 
 import { createUser } from '../helpers/users'

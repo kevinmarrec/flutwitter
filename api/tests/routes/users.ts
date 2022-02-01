@@ -1,4 +1,4 @@
-import faker from 'faker'
+import { faker } from 'faker'
 import { createSigner } from 'fast-jwt'
 import { beforeEach, describe, expect, test } from 'vitest'
 

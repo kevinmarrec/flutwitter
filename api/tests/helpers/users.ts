@@ -1,6 +1,6 @@
 import type { Prisma, User } from '@prisma/client'
 import bcrypt from 'bcryptjs'
-import faker from 'faker'
+import { faker } from 'faker'
 
 interface UserPayload extends Pick<User, 'email' | 'name'> {
   birthDate: string
