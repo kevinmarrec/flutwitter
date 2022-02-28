@@ -6,12 +6,14 @@ import autoload from './utils/autoload'
 
 export async function createServer (): Promise<FastifyInstance> {
   const server = fastify({
-    logger: process.env.LOGGER === 'true' && /* istanbul ignore next */ {
+    /* c8 ignore start */
+    logger:  process.env.LOGGER === 'true' && {
       prettyPrint: {
         colorize: true,
         translateTime: 'SYS:HH:MM:ss.l p'
       }
     }
+    /* c8 ignore stop */
   })
 
   await server.register(sensible)
