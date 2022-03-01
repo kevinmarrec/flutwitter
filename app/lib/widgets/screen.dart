@@ -74,6 +74,31 @@ class ScreenBottomAppBar extends StatelessWidget {
   }
 }
 
+class ScreenBottomAppBarLeftButton extends StatelessWidget {
+  const ScreenBottomAppBarLeftButton({
+    Key? key,
+    required this.onPressed,
+    required this.text,
+  }) : super(key: key);
+
+  final VoidCallback? onPressed;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      child: Text(text),
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(
+          horizontal: kDefaultPadding,
+        ),
+        onPrimary: Colors.white,
+      ),
+    );
+  }
+}
+
 class ScreenBottomAppBarRightButton extends StatelessWidget {
   const ScreenBottomAppBarRightButton({
     Key? key,

@@ -31,5 +31,8 @@
   "registrationPasswordScreenFieldErrorLength": "Votre mot de passe doit contenir au moins 8 caractères.\nVeuillez en saisir un plus long.",
   "registrationToastIncorrectCode": "Le code que vous avez saisi est invalide.\nVeuillez réessayer.",
   "registrationToastTooManyAttempts": "Vous avez dépassé le nombre de tentatives.\nRéessayez plus tard.",
-  "registrationToastError": "Une erreur est survenue lors de l'inscription."
+  "registrationToastError": "Une erreur est survenue lors de l'inscription.",
+  "loginFormScreenTitle": "Se connecter",
+  "loginFormScreenIdentifierFieldPlaceholder": "Email ou Nom d'utilisateur",
+  "loginFormScreenPasswordFieldPlaceholder": "Mot de passe"
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutwitter/l10n/l10n.dart';
-import 'package:flutwitter/screens/login/login_search_screen.dart';
+import 'package:flutwitter/screens/login/form_screen.dart';
 import 'package:flutwitter/screens/registration/details_screen.dart';
 import 'package:flutwitter/shared/constants.dart';
 import 'package:flutwitter/widgets/screen.dart';
@@ -63,7 +63,7 @@ class WelcomeScreen extends StatelessWidget {
             children: [
               Text(l10n.welcomeScreenQuestion),
               TextButton(
-                onPressed: () => Navigator.of(context).pushNamed(LoginSearchScreen.routeName),
+                onPressed: () => Navigator.of(context).pushNamed(LoginFormScreen.routeName),
                 child: Text(l10n.welcomeScreenAnswer),
               )
             ],

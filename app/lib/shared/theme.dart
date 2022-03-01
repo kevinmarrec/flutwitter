@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutwitter/shared/constants.dart';
 
 const Color backgroundColor = Color(0xFF15202B);
 const Color primaryColor = Color(0xFF1DA1F2);
@@ -26,10 +27,17 @@ ThemeData getTheme() {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 8,
+        padding: const EdgeInsets.all(kDefaultPadding),
+        shape: const StadiumBorder(),
+        textStyle: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
         ),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.all(kDefaultPadding),
         shape: const StadiumBorder(),
         textStyle: const TextStyle(
           fontWeight: FontWeight.bold,

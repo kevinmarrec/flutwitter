@@ -38,5 +38,8 @@
   "registrationPasswordScreenFieldErrorLength": "Your password needs to be at least 8 characters.\nPlease enter a longer one.",
   "registrationToastIncorrectCode": "The code you entered is incorrect.\nPlease try again.",
   "registrationToastTooManyAttempts": "You've exceeded the number of attempts.\nPlease try again later.",
-  "registrationToastError": "Can't complete your signup right now."
+  "registrationToastError": "Can't complete your signup right now.",
+  "loginFormScreenTitle": "Log In",
+  "loginFormScreenIdentifierFieldPlaceholder": "Email or username",
+  "loginFormScreenPasswordFieldPlaceholder": "Password"
 }

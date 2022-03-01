@@ -64,7 +64,7 @@ class PasswordField extends HookConsumerWidget {
     return TextField(
       obscureText: !visible.value,
       decoration: InputDecoration(
-        hintText: AppLocalizations.of(context)!.registrationPasswordScreenFieldPlaceholder,
+        hintText: l10n.registrationPasswordScreenFieldPlaceholder,
         errorText: errorText.value,
         suffixIcon: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
